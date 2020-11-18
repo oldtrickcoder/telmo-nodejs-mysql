@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/Bootstrap4/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/Bootstrap4/css/bootstrap.min.css">
+   <link rel="stylesheet" href="/style.css">
+    <title>Login Project</title>
+</head>
+<body>
+   <nav>
+       <h4>NODE MySQL</h4>
+       <ul>
+           <li><a href="/">Home</a></li>
+           <li><a href="/login">Login</a></li>
+           <li><a href="/register">Register</a></li>
+       </ul>
+   </nav>
+   
+
+<div class="container mt-4">
+<div class="card">
+  <div class="card-body">
+    <div class="card-header">
+        <h4>Login Form</h4>
+    </div>
+    <div class="card-body">
+
+  <form action="/auth/login" method="POST">
+     <div class="form-group">
+       
+       <div class="form-group">
+         <label for="email">Email Address</label>
+         <input type="email" class="form-control" id="email" name="email">
+       </div>
+
+        <div class="form-group">
+         <label for="password">Password</label>
+         <input type="password" class="form-control" id="password" name="password">
+       </div>
+
+
+
+      
+
+       <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
+
+    </div>
+  </div>
+  {{#if message}}
+<h4 class="alert alert-danger mt-4">{{message}}</h4>
+{{/if}}
+</div>
+
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+</body>
+</html>
