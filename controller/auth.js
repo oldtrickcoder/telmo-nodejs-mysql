@@ -8,30 +8,48 @@ const db=mysql.createConnection({
     user: process.env.DATABASE_USER,
     password:process.env.DATABASE_PASSWORD,
     database:"telmo_nodejs"});
-
-exports.login=function(req,res){
+// Bagian LOGIN
+exports.login=async(req,res)=>{
     try{
         const {email,password}=req.body;
-        if (!email||!password)
-        {return res.status(400).render('login',{message:'Please provide an email and password'});}
-        
+        if (!email || !password){
+            return res.status(400).render('login',{message:'please provide email and password'});
+        }
+
         db.query('SELECT * FROM users WHERE email = ?',[email], async (error,results)=>{
-            if(!email|| !(await bcrypt.compare(password, results[0].password)) )
-            {res.status(401).render('login',{message:'Email or Password is Incorect'});}
-            
-        });
-
+            console.log(results);
+            if( !results || !(await bcrypt.compare(password, results[0].password)))
+            {res.status(401).render('login',{message:'Email or Password is incorrect'});}
+            else{
+                const id = results[0].id;
+                const token=jwt.sign({ id: id},'mysupersecretpassword', {expiresIn: '90d'});
+                console.log("the token is :  " + token);
+                const cookieOptions = { expires:new Date(Date.now() + 90 * 24 * 60 * 60 * 1000 ),httpOnly:true}
+                res.cookie('jwt', token, cookieOptions);
+                res.status(200).redirect("/");
+            }
+ 
         
-    } catch (error) {
-        console.log(error);
-        res.status(401).render('login',{message:'Terjadi kesalahan di Internal Sistem'});
+        })
+
+
     }
-   
 
+    catch(error){
+        console.log(error);
+    }
 }
-    
 
-//    
+
+
+
+
+
+
+
+
+
+// bagian register    
 exports.register=(req,res)=>{
     const {name,email,password,passwordconfirm}=req.body;
     console.log(req.body);
@@ -50,5 +68,9 @@ exports.register=(req,res)=>{
 
    
   
+}
+
+function newFunction(id) {
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresin: process.env.JWT_EXPIRES_IN });
 }
 
